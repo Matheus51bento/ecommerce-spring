@@ -1,10 +1,12 @@
 package br.ifrn.edu.jeferson.ecommerce.service;
 
 import br.ifrn.edu.jeferson.ecommerce.domain.Cliente;
+import br.ifrn.edu.jeferson.ecommerce.domain.Endereco;
 import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClientRequestDTO;
 import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClientResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.mapper.ClientMapper;
 import br.ifrn.edu.jeferson.ecommerce.repository.ClienteRepository;
+import br.ifrn.edu.jeferson.ecommerce.repository.EnderecoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +22,22 @@ public class ClientService {
     private ClienteRepository clienteRepository;
     @Autowired
     private ClientMapper clientMapper;
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     public ClientResponseDTO createCliente(ClientRequestDTO clientRequestDTO) {
+
         Cliente cliente = clientMapper.toEntity(clientRequestDTO);
+
+        Endereco endereco = clientMapper.toEntity(clientRequestDTO.getEndereco());
+        endereco = enderecoRepository.save(endereco);
+
+        cliente.setEndereco(endereco);
         Cliente savedCliente = clienteRepository.save(cliente);
+
+        endereco.setCliente(savedCliente);
+        enderecoRepository.save(endereco);
+
         return clientMapper.toDTO(savedCliente);
     }
 

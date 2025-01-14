@@ -3,6 +3,7 @@ package br.ifrn.edu.jeferson.ecommerce.domain.dtos;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Data
@@ -30,6 +31,6 @@ public class ClientRequestDTO {
     private String telefone;
 
     @Schema(description = "Endereço do cliente")
+    @NotNull(message = "Endereço é obrigatório")
     private EnderecoRequestDTO endereco;
-
 }

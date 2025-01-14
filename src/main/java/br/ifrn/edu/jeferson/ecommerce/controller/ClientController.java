@@ -6,6 +6,7 @@ import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClientResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.mapper.ClientMapper;
 import br.ifrn.edu.jeferson.ecommerce.repository.ClienteRepository;
 import br.ifrn.edu.jeferson.ecommerce.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,8 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping
-    @Transactional
-    public ClientResponseDTO createCliente(ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO createCliente(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
+        System.out.printf("ClientRequestDTO: %s\n", clientRequestDTO);
         return clientService.createCliente(clientRequestDTO);
     }
 
@@ -33,19 +34,19 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public Optional<ClientResponseDTO> getClienteById(Long id) {
+    public Optional<ClientResponseDTO> getClienteById(@PathVariable Long id) {
         return clientService.getClienteById(id);
     }
 
     @PatchMapping("/{id}")
     @Transactional
-    public ClientResponseDTO updateCliente(Long id, ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO updateCliente(@PathVariable Long id,@RequestBody ClientRequestDTO clientRequestDTO) {
         return clientService.updateCliente(id, clientRequestDTO);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void deleteCliente(Long id) {
+    public void deleteCliente(@PathVariable Long id) {
         clientService.deleteCliente(id);
     }
 
