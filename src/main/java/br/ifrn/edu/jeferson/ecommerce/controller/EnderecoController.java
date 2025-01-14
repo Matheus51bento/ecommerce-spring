@@ -23,7 +23,6 @@ public class EnderecoController {
     @Operation
     @PostMapping
     public ResponseEntity<EnderecoResponseDTO> salvar(@RequestBody EnderecoRequestDTO enderecoDto) {
-
         return ResponseEntity.ok(enderecoService.salvar(enderecoDto));
     }
 
@@ -31,6 +30,12 @@ public class EnderecoController {
     @GetMapping
     public ResponseEntity<List<EnderecoResponseDTO>> listar() {
         return ResponseEntity.ok(enderecoService.lista());
+    }
+
+    @Operation
+    @GetMapping("/{id}/cliente")
+    public ResponseEntity<EnderecoResponseDTO> buscarPorCliente(@PathVariable Long id) {
+        return ResponseEntity.ok(enderecoService.buscarPorCliente(id));
     }
 
     @Operation

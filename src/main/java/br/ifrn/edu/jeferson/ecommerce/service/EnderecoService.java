@@ -59,8 +59,9 @@ public class EnderecoService {
         return enderecoMapper.toResponseDTO(enderecoAlterado);
     }
 
-    public EnderecoResponseDTO buscarPorId(Long id) {
-        Endereco endereco = enderecoRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Endereço não encontrado"));
+    public EnderecoResponseDTO buscarPorCliente(Long id) {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Cliente não encontrado"));
+        Endereco endereco = enderecoRepository.findByCliente(cliente).orElseThrow( () -> new ResourceNotFoundException("Endereço não encontrado"));
         return enderecoMapper.toResponseDTO(endereco);
     }
 

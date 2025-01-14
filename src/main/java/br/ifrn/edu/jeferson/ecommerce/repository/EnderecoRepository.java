@@ -12,4 +12,5 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
     boolean existsByCliente(Cliente cliente);
 
+    Optional<Endereco> findByCliente(Cliente cliente);
 }

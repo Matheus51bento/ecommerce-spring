@@ -6,6 +6,7 @@ import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ClientResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.mapper.ClientMapper;
 import br.ifrn.edu.jeferson.ecommerce.repository.ClienteRepository;
 import br.ifrn.edu.jeferson.ecommerce.service.ClientService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/clientes")
+@Tag(name = "Clientes", description = "API de gerenciamento de clientes")
 public class ClientController {
 
     @Autowired
