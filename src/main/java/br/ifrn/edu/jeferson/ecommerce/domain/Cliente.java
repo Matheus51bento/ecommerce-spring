@@ -1,5 +1,7 @@
 package br.ifrn.edu.jeferson.ecommerce.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,7 @@ public class Cliente {
     private String telefone;
 
     @OneToOne(mappedBy = "cliente")
+    @JsonBackReference
     private Endereco endereco;
 
     @OneToMany(mappedBy = "cliente")
