@@ -34,8 +34,18 @@ public class ProdutoService {
         Produto produto = produtoMapper.toEntity(produtoRequestDTO);
         List<Categoria> categorias = categoriaRepository.findAllById(produtoRequestDTO.getCategoriaIds());
         produto.setCategorias(categorias);
-
         Produto savedProduto = produtoRepository.save(produto);
+        return produtoMapper.toDTO(savedProduto);
+    }
+
+    public ProdutoResponseDTO updateProduto(Long id, ProdutoRequestDTO produtoRequestDTO) {
+        Produto produto = produtoRepository.findById(id).orElseThrow();
+        System.out.println("\n\n\nIds: " + produtoRequestDTO.getCategoriaIds());
+        List<Categoria> categorias = categoriaRepository.findAllById(produtoRequestDTO.getCategoriaIds());
+        Produto updated = produtoMapper.toEntity(produtoRequestDTO);
+        updated.setId(produto.getId());
+        updated.setCategorias(categorias);
+        Produto savedProduto = produtoRepository.save(updated);
         return produtoMapper.toDTO(savedProduto);
     }
 
@@ -44,6 +54,20 @@ public class ProdutoService {
                 .map(produtoMapper::toDTO);
     }
 
+    public void deleteProduto(Long id) {
+        produtoRepository.deleteById(id);
+    }
 
+    public ProdutoResponseDTO atualizarEstoque(Long id, Integer quantidade) {
+        Produto produto = produtoRepository.findById(id).orElseThrow();
+        produto.setEstoque(produto.getEstoque() + quantidade);
+        Produto updated = produtoRepository.save(produto);
+        return produtoMapper.toDTO(updated);
+    }
+
+    public Page<ProdutoResponseDTO> listarPorCartegoria(Long id, Pageable pageable) {
+        Page<Produto> produtos = produtoRepository.findByCategoriasId(id,pageable);
+        return produtos.map(produtoMapper::toDTO);
+    }
 
 }

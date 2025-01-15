@@ -7,7 +7,7 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_DB=ecommerce
-      - POSTGRES_USER=developerjusinvestments
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${DB_PASSWORD:-123}
     volumes:
       - postgres_data:/var/lib/postgresql/data

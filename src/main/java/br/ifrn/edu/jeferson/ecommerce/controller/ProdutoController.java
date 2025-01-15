@@ -32,4 +32,25 @@ public class ProdutoController {
         return produtoService.createProduto(produtoRequestDTO);
     }
 
+    @PatchMapping("/{id}")
+    public ProdutoResponseDTO updateProduto(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+        return produtoService.updateProduto(id, produtoRequestDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduto(@PathVariable Long id) {
+        produtoService.deleteProduto(id);
+    }
+
+    @PostMapping("/{id}/estoque")
+    @Tag(name = "Estoque", description = "API de gerenciamento de estoque, você pode adicionar ou remover produtos do estoque")
+    public ProdutoResponseDTO adicionarEstoque(@PathVariable Long id, @RequestParam Integer quantidade) {
+        return produtoService.atualizarEstoque(id, quantidade);
+    }
+
+    @GetMapping("/{id}/categorias")
+    public Page<ProdutoResponseDTO> getProdutosByCategoria(@PathVariable Long id, Pageable pageable) {
+        return produtoService.listarPorCartegoria(id, pageable);
+    }
+
 }
