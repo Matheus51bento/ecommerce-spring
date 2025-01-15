@@ -27,8 +27,12 @@ public class ItemPedido {
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-
-
-
+    @PrePersist
+    @PreUpdate
+    public void atualizarValorUnitario() {
+        if (produto != null) {
+            this.valorUnitario = produto.getPreco();
+        }
+    }
 
 }

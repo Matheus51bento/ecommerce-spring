@@ -30,4 +30,5 @@ public class Produto {
     @JsonManagedReference
     private List<Categoria> categorias = new ArrayList<>();
 
+
 }

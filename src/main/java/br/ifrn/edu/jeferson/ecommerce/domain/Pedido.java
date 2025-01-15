@@ -32,5 +32,19 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens = new ArrayList<>();
 
+    @PrePersist
+    public void prePersist() {
+        if (dataPedido == null) {
+            dataPedido = LocalDateTime.now();
+        }
+        calcularValorTotal();
+    }
+
+    public void calcularValorTotal() {
+        valorTotal = BigDecimal.ZERO;
+        for (ItemPedido item : itens) {
+            valorTotal = valorTotal.add(item.getValorUnitario().multiply(BigDecimal.valueOf(item.getQuantidade())));
+        }
+    }
 
 }
