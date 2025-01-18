@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -41,16 +42,24 @@ public class PedidoService {
         return pedidoMapper.toDTO(pedidoRepository.findById(id).orElseThrow());
     }
 
+    @Transactional
     public PedidoResponseDTO createPedido(PedidoRequestDTO pedidoRequestDTO) {
         System.out.println("\n\n\n\nPedidoRequestDTO: " + pedidoRequestDTO.getItens());
+
         Cliente cliente = clienteRepository.findById(pedidoRequestDTO.getClienteId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente não encontrado"));
-        StatusPedido statusPedido = pedidoRequestDTO.getStatusPedido();
 
         Pedido pedido = pedidoMapper.toEntity(pedidoRequestDTO);
         pedido.setCliente(cliente);
-        pedido.setStatusPedido(statusPedido);
-        pedido.setItens(pedidoRequestDTO.getItens());
+        pedido.setStatusPedido(pedidoRequestDTO.getStatusPedido());
+
+        List<ItemPedido> itemPedidos = mapearItens(pedidoRequestDTO.getItens());
+        for (ItemPedido item : itemPedidos) {
+            item.setPedido(pedido);
+        }
+
+        pedido.setItens(itemPedidos);
+        pedidoRepository.save(pedido);
         return pedidoMapper.toDTO(pedido);
     }
 

@@ -28,6 +28,7 @@ public class Cliente {
     private Endereco endereco;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonManagedReference
     private List<Pedido> pedidos = new ArrayList<>();
 
 

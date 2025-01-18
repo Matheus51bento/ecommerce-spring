@@ -1,6 +1,8 @@
 package br.ifrn.edu.jeferson.ecommerce.domain;
 
 import br.ifrn.edu.jeferson.ecommerce.domain.enums.StatusPedido;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,9 +29,11 @@ public class Pedido {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @JsonBackReference
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "pedido")
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<ItemPedido> itens = new ArrayList<>();
 
     @PrePersist
