@@ -63,6 +63,19 @@ public class PedidoService {
         return pedidoMapper.toDTO(pedido);
     }
 
+    public PedidoResponseDTO updateStatusPedido(Long id, StatusPedido statusPedido) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pedido não encontrado"));
+        pedido.setStatusPedido(statusPedido);
+        pedidoRepository.save(pedido);
+        return pedidoMapper.toDTO(pedido);
+    }
+
+    public Page<PedidoResponseDTO> findByCliente(Long id, Pageable pageable) {
+        Page<Pedido> pedidos = pedidoRepository.findByClienteId(id, pageable);
+        return pedidoMapper.toDTOs(pedidos);
+    }
+
     private List<ItemPedido> mapearItens(List<ItemPedidoRequestDTO> itemPedidoRequestDTOs) {
         List<ItemPedido> itens = new ArrayList<>();
         for (ItemPedidoRequestDTO itemDTO : itemPedidoRequestDTOs) {
