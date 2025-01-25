@@ -3,6 +3,8 @@ package br.ifrn.edu.jeferson.ecommerce.controller;
 import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ProdutoRequestDTO;
 import br.ifrn.edu.jeferson.ecommerce.domain.dtos.ProdutoResponseDTO;
 import br.ifrn.edu.jeferson.ecommerce.service.ProdutoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,10 +19,17 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
+    @Operation(summary = "Lista todos os produtos com paginação",
+            description = "Permite buscar produtos por nome de forma opcional e mantém a paginação.")
     @GetMapping
-    public Page<ProdutoResponseDTO> getAllProdutos(Pageable pageable) {
-        return produtoService.getAllProdutos(pageable);
+    public Page<ProdutoResponseDTO> getAllProdutos(
+            @Parameter(description = "Nome do produto para filtrar os resultados", example = "Celular")
+            @RequestParam(required = false) String nome,
+            @Parameter(description = "Paginação dos resultados")
+            Pageable pageable) {
+        return produtoService.getAllProdutos(nome, pageable);
     }
+
 
     @GetMapping("/{id}")
     public ProdutoResponseDTO getProdutoById(@PathVariable Long id) {

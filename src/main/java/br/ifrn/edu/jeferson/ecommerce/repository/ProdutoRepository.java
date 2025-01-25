@@ -12,4 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     Page<Produto> findByCategoriasId(Long id, Pageable pageable);
+
+    Page<Produto> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 }

@@ -49,9 +49,16 @@ public class ProdutoService {
         return produtoMapper.toDTO(savedProduto);
     }
 
-    public Page<ProdutoResponseDTO> getAllProdutos(Pageable pageable) {
-        return produtoRepository.findAll(pageable)
-                .map(produtoMapper::toDTO);
+    public Page<ProdutoResponseDTO> getAllProdutos(String nome, Pageable pageable) {
+        Page<Produto> produtos;
+
+        if (nome != null && !nome.isEmpty()) {
+            produtos = produtoRepository.findByNomeContainingIgnoreCase(nome, pageable);
+        } else {
+            produtos = produtoRepository.findAll(pageable);
+        }
+
+        return produtos.map(produtoMapper::toDTO);
     }
 
     public void deleteProduto(Long id) {

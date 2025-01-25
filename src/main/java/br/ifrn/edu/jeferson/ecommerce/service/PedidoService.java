@@ -35,7 +35,9 @@ public class PedidoService {
     private ProdutoRepository produtoRepository;
 
     public Page<PedidoResponseDTO> findAll(Pageable pageable) {
+
         return pedidoRepository.findAll(pageable).map(pedidoMapper::toDTO);
+
     }
 
     public PedidoResponseDTO findById(Long id) {
@@ -55,7 +57,19 @@ public class PedidoService {
 
         List<ItemPedido> itemPedidos = mapearItens(pedidoRequestDTO.getItens());
         for (ItemPedido item : itemPedidos) {
+            Produto produto = produtoRepository.findById(item.getProduto().getId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto não encontrado"));
+
+            if (produto.getEstoque() < item.getQuantidade()) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Estoque insuficiente para o produto: " + produto.getNome());
+            }
+
+            produto.setEstoque(produto.getEstoque() - item.getQuantidade());
+            produtoRepository.save(produto);
+
             item.setPedido(pedido);
+            item.setValorUnitario(produto.getPreco());
         }
 
         pedido.setItens(itemPedidos);
