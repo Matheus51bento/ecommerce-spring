@@ -23,6 +23,8 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @PostMapping
     public ClientResponseDTO createCliente(@RequestBody @Valid ClientRequestDTO clientRequestDTO) {
@@ -49,6 +51,13 @@ public class ClientController {
     @DeleteMapping("/{id}")
     @Transactional
     public void deleteCliente(@PathVariable Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado."));
+
+        if (cliente.getPedidos() != null && !cliente.getPedidos().isEmpty()) {
+            throw new IllegalStateException("Não é possível deletar um cliente que possui pedidos associados.");
+        }
+
         clientService.deleteCliente(id);
     }
 

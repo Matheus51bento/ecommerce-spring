@@ -6,6 +6,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -24,6 +26,7 @@ public class ProdutoRequestDTO {
     private String descricao;
 
     @NotNull(message = "O preço é obrigatório")
+    @PositiveOrZero(message = "O preço não pode ser negativo")
     private BigDecimal preco;
 
     @NotNull(message = "O estoque é obrigatório")

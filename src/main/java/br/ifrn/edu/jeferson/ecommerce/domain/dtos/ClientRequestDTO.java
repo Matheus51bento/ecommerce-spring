@@ -1,5 +1,6 @@
 package br.ifrn.edu.jeferson.ecommerce.domain.dtos;
 
+import br.ifrn.edu.jeferson.ecommerce.validators.ValidCPF;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -24,6 +25,7 @@ public class ClientRequestDTO {
 
     @Schema(description = "CPF do cliente", example = "123.456.789-00")
     @NotBlank(message = "O CPF é obrigatório.")
+    @ValidCPF
     private String cpf;
 
     @Schema(description = "Telefone do cliente", example = "(84) 98765-4321")
